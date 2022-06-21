@@ -38,7 +38,7 @@ class IgViewModel @Inject constructor(
                         .addOnCompleteListener { task ->
                             if (task.isSuccessful) {
                                 signedIn.value = true
-                                // create profile
+                                createOrUpdateProfile(username = username)
                             } else {
                                 handleException(task.exception, "Signup failed")
                             }
@@ -47,6 +47,53 @@ class IgViewModel @Inject constructor(
                 }
             }
             .addOnFailureListener { }
+    }
+
+    private fun createOrUpdateProfile(
+        name: String? = null,
+        username: String? = null,
+        bio: String? = null,
+        imageUrl: String? = null
+    ) {
+        val uid = auth.currentUser?.uid
+        val userDto = UserDto(
+            userId = uid,
+            name = name ?: userData.value?.name,
+            username = username ?: userData.value?.username,
+            bio = bio ?: userData.value?.bio,
+            imageUrl = imageUrl ?: userData.value?.imageUrl,
+            following = userData.value?.following
+        )
+
+        uid?.let { uid ->
+            inProgress.value = true
+            db.collection(USERS).document(uid).get()
+                .addOnSuccessListener { doc ->
+                    if (doc.exists()) {
+                        doc.reference.update(userDto.toMap())
+                            .addOnSuccessListener {
+                                userData.value = userDto
+                                inProgress.value = false
+                            }
+                            .addOnFailureListener { e ->
+                                handleException(e, "Cannot update user")
+                                inProgress.value = false
+                            }
+                    } else {
+                        db.collection(USERS).document(uid).set(userDto)
+                        getUserData(uid)
+                        inProgress.value = false
+                    }
+                }
+                .addOnFailureListener { e ->
+                    handleException(e, "Cannot create user")
+                    inProgress.value = false
+                }
+        }
+    }
+
+    private fun getUserData(uid: String) {
+
     }
 
     fun handleException(exception: Exception? = null, message: String = "") {
