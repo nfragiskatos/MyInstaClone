@@ -24,6 +24,8 @@ import androidx.navigation.NavController
 import com.example.myinstaclone.R
 import com.example.myinstaclone.presentation.CommonProgressSpinner
 import com.example.myinstaclone.presentation.IgViewModel
+import com.example.myinstaclone.presentation.ScreenDestination
+import com.example.myinstaclone.presentation.navigateTo
 
 @Composable
 fun SignupScreen(
@@ -97,7 +99,9 @@ fun SignupScreen(
                 color = Color.Blue,
                 modifier = Modifier
                     .padding(8.dp)
-                    .clickable { }
+                    .clickable {
+                        navigateTo(navController, ScreenDestination.Login)
+                    }
             )
         }
         val isLoading = vm.inProgress.value

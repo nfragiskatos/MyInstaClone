@@ -13,6 +13,7 @@ import androidx.compose.ui.Modifier
 import androidx.compose.ui.draw.alpha
 import androidx.compose.ui.graphics.Color
 import androidx.compose.ui.platform.LocalContext
+import androidx.navigation.NavController
 
 @Composable
 fun NotificationMessage(vm: IgViewModel) {
@@ -35,5 +36,12 @@ fun CommonProgressSpinner() {
         verticalAlignment = Alignment.CenterVertically
     ) {
         CircularProgressIndicator()
+    }
+}
+
+fun navigateTo(navController: NavController, dest: ScreenDestination) {
+    navController.navigate(dest.route) {
+        popUpTo(dest.route)
+        launchSingleTop = true
     }
 }
