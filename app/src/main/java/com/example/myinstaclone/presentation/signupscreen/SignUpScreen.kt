@@ -22,6 +22,7 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myinstaclone.R
+import com.example.myinstaclone.presentation.CommonProgressSpinner
 import com.example.myinstaclone.presentation.IgViewModel
 
 @Composable
@@ -98,6 +99,10 @@ fun SignupScreen(
                     .padding(8.dp)
                     .clickable { }
             )
+        }
+        val isLoading = vm.inProgress.value
+        if (isLoading) {
+            CommonProgressSpinner()
         }
     }
 }
