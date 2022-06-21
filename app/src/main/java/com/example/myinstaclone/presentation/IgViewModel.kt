@@ -6,6 +6,7 @@ import com.example.myinstaclone.data.Event
 import com.example.myinstaclone.data.remote.dto.UserDto
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
+import com.google.firebase.firestore.ktx.toObject
 import com.google.firebase.storage.FirebaseStorage
 import dagger.hilt.android.lifecycle.HiltViewModel
 import javax.inject.Inject
@@ -24,6 +25,15 @@ class IgViewModel @Inject constructor(
     val inProgress = mutableStateOf(false)
     val userData = mutableStateOf<UserDto?>(null)
     val popupNotification = mutableStateOf<Event<String>?>(null)
+
+    init {
+//        auth.signOut()
+        val currentUser = auth.currentUser
+        signedIn.value = currentUser != null
+        currentUser?.uid?.let { uid ->
+            getUserData(uid)
+        }
+    }
 
     fun onSignup(username: String, email: String, pass: String) {
         inProgress.value = true
@@ -93,7 +103,17 @@ class IgViewModel @Inject constructor(
     }
 
     private fun getUserData(uid: String) {
-
+        inProgress.value = true
+        db.collection(USERS).document(uid).get()
+            .addOnSuccessListener { doc ->
+                val user = doc.toObject<UserDto>()
+                userData.value = user
+                inProgress.value = false
+            }
+            .addOnFailureListener { e ->
+                handleException(e, "Cannot retrieve user data")
+                inProgress.value = false
+            }
     }
 
     fun handleException(exception: Exception? = null, message: String = "") {
