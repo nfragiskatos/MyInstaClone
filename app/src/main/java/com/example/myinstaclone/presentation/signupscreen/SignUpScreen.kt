@@ -83,7 +83,13 @@ fun SignupScreen(
                 label = { Text(text = "Password") },
                 visualTransformation = PasswordVisualTransformation()
             )
-            Button(onClick = { /*TODO*/ }, modifier = Modifier.padding(8.dp)) {
+            Button(onClick = {
+                vm.onSignup(
+                    usernameState.value.text,
+                    emailState.value.text,
+                    passState.value.text
+                )
+            }, modifier = Modifier.padding(8.dp)) {
                 Text(text = "Signup")
             }
             Text(text = "Already a user? Go to login ->",
