@@ -16,6 +16,7 @@ import androidx.navigation.compose.rememberNavController
 import com.example.myinstaclone.presentation.IgViewModel
 import com.example.myinstaclone.presentation.NotificationMessage
 import com.example.myinstaclone.presentation.ScreenDestination
+import com.example.myinstaclone.presentation.feedscreen.FeedScreen
 import com.example.myinstaclone.presentation.loginscreen.LoginScreen
 import com.example.myinstaclone.presentation.signupscreen.SignupScreen
 import com.example.myinstaclone.ui.theme.MyInstaCloneTheme
@@ -50,6 +51,9 @@ fun InstagramApp() {
         }
         composable(ScreenDestination.Login.route) {
             LoginScreen(navController = navController, vm = vm)
+        }
+        composable(ScreenDestination.Feed.route) {
+            FeedScreen(navController = navController, vm = vm)
         }
     }
 }

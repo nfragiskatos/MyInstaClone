@@ -23,13 +23,13 @@ import androidx.compose.ui.unit.dp
 import androidx.compose.ui.unit.sp
 import androidx.navigation.NavController
 import com.example.myinstaclone.R
-import com.example.myinstaclone.presentation.CommonProgressSpinner
-import com.example.myinstaclone.presentation.IgViewModel
-import com.example.myinstaclone.presentation.ScreenDestination
-import com.example.myinstaclone.presentation.navigateTo
+import com.example.myinstaclone.presentation.*
 
 @Composable
 fun LoginScreen(navController: NavController, vm: IgViewModel) {
+
+    CheckSignedIn(navController = navController, vm = vm)
+
     val focus = LocalFocusManager.current
     Box(modifier = Modifier.fillMaxSize()) {
         Column(
