@@ -36,6 +36,10 @@ class IgViewModel @Inject constructor(
     }
 
     fun onSignup(username: String, email: String, pass: String) {
+        if (username.isBlank() || email.isBlank() || pass.isBlank()) {
+            handleException(message = "Please fill in all fields")
+            return
+        }
         inProgress.value = true
 
         db.collection(USERS).whereEqualTo("username", username).get()
@@ -57,6 +61,31 @@ class IgViewModel @Inject constructor(
                 }
             }
             .addOnFailureListener { }
+    }
+
+    fun onLogin(email: String, pass: String) {
+        if (email.isBlank() || pass.isBlank()) {
+            handleException(message = "Please fill in all fields")
+            return
+        }
+        inProgress.value = true
+
+        auth.signInWithEmailAndPassword(email, pass)
+            .addOnCompleteListener { task ->
+                if (task.isSuccessful) {
+                    signedIn.value = true
+                    inProgress.value = false
+                    auth.currentUser?.uid?.let { uid ->
+                        getUserData(uid)
+                    }
+                } else {
+                    handleException(task.exception, "Login failed")
+                    inProgress.value = false
+                }
+            }
+            .addOnFailureListener { e ->
+                handleException(e, "Login failed")
+            }
     }
 
     private fun createOrUpdateProfile(
