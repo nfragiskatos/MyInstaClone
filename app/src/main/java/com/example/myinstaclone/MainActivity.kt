@@ -18,6 +18,8 @@ import com.example.myinstaclone.presentation.NotificationMessage
 import com.example.myinstaclone.presentation.ScreenDestination
 import com.example.myinstaclone.presentation.feedscreen.FeedScreen
 import com.example.myinstaclone.presentation.loginscreen.LoginScreen
+import com.example.myinstaclone.presentation.mypostsscreen.MyPostsScreen
+import com.example.myinstaclone.presentation.searchscreen.SearchScreen
 import com.example.myinstaclone.presentation.signupscreen.SignupScreen
 import com.example.myinstaclone.ui.theme.MyInstaCloneTheme
 import dagger.hilt.android.AndroidEntryPoint
@@ -54,6 +56,12 @@ fun InstagramApp() {
         }
         composable(ScreenDestination.Feed.route) {
             FeedScreen(navController = navController, vm = vm)
+        }
+        composable(ScreenDestination.Search.route) {
+            SearchScreen(navController = navController, vm = vm)
+        }
+        composable(ScreenDestination.MyPosts.route) {
+            MyPostsScreen(navController = navController, vm = vm)
         }
     }
 }
