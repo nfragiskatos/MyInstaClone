@@ -19,6 +19,7 @@ import com.example.myinstaclone.presentation.ScreenDestination
 import com.example.myinstaclone.presentation.feedscreen.FeedScreen
 import com.example.myinstaclone.presentation.loginscreen.LoginScreen
 import com.example.myinstaclone.presentation.mypostsscreen.MyPostsScreen
+import com.example.myinstaclone.presentation.newpostscreen.NewPostScreen
 import com.example.myinstaclone.presentation.profilescreen.ProfileScreen
 import com.example.myinstaclone.presentation.searchscreen.SearchScreen
 import com.example.myinstaclone.presentation.signupscreen.SignupScreen
@@ -66,6 +67,12 @@ fun InstagramApp() {
         }
         composable(ScreenDestination.Profile.route) {
             ProfileScreen(navController = navController, vm = vm)
+        }
+        composable(ScreenDestination.NewPost.route) { navBackstackEntry ->
+            val imageUri = navBackstackEntry.arguments?.getString("imageUri")
+            imageUri?.let {
+                NewPostScreen(navController = navController, vm = vm, encodedUri = it)
+            }
         }
     }
 }

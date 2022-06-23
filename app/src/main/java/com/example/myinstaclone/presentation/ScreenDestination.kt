@@ -7,4 +7,7 @@ sealed class ScreenDestination(val route: String) {
     object Search : ScreenDestination("search")
     object MyPosts : ScreenDestination("myposts")
     object Profile : ScreenDestination("profile")
+    object NewPost : ScreenDestination("newpost/{imageUri}") {
+        fun createRoute(uri: String) = "newpost/$uri"
+    }
 }
