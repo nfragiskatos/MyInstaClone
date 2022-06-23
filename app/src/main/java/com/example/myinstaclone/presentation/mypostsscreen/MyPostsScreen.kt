@@ -22,6 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myinstaclone.R
+import com.example.myinstaclone.presentation.CommonProgressSpinner
 import com.example.myinstaclone.presentation.IgViewModel
 import com.example.myinstaclone.presentation.UserImageCard
 import com.example.myinstaclone.presentation.bottomnavigationmenu.BottomNavigationItem
@@ -89,6 +90,10 @@ fun MyPostsScreen(navController: NavController, vm: IgViewModel) {
             selectedItem = BottomNavigationItem.POSTS,
             navController = navController
         )
+    }
+
+    if (isLoading) {
+        CommonProgressSpinner()
     }
 }
 
