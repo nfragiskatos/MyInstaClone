@@ -43,8 +43,8 @@ fun ProfileScreen(navController: NavController, vm: IgViewModel) {
             bio = bio,
             onNameChange = { name = it },
             onUsernameChange = { username = it },
-            onbioChange = { bio = it },
-            onSave = {},
+            onBioChange = { bio = it },
+            onSave = { vm.updateProfileData(name, username, bio) },
             onBack = { navigateTo(navController, ScreenDestination.MyPosts) },
             onLogout = {}
         )
@@ -60,7 +60,7 @@ fun ProfileContent(
     bio: String,
     onNameChange: (String) -> Unit,
     onUsernameChange: (String) -> Unit,
-    onbioChange: (String) -> Unit,
+    onBioChange: (String) -> Unit,
     onSave: () -> Unit,
     onBack: () -> Unit,
     onLogout: () -> Unit,
@@ -137,7 +137,7 @@ fun ProfileContent(
             Text(text = "Bio", modifier = Modifier.width(100.dp))
             TextField(
                 value = bio,
-                onValueChange = onbioChange,
+                onValueChange = onBioChange,
                 colors = TextFieldDefaults.textFieldColors(
                     backgroundColor = Color.Transparent,
                     textColor = Color.Black,
