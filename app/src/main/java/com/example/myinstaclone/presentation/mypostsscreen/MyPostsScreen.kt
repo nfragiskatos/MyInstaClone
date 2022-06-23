@@ -98,7 +98,7 @@ fun MyPostsScreen(navController: NavController, vm: IgViewModel) {
 }
 
 @Composable
-fun ProfileImage(imageUrl: String?, onClick: () -> Unit) {
+private fun ProfileImage(imageUrl: String?, onClick: () -> Unit) {
     Box(modifier = Modifier
         .padding(top = 16.dp)
         .clickable { onClick.invoke() }) {
