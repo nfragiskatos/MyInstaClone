@@ -22,9 +22,7 @@ import androidx.compose.ui.text.style.TextAlign
 import androidx.compose.ui.unit.dp
 import androidx.navigation.NavController
 import com.example.myinstaclone.R
-import com.example.myinstaclone.presentation.CommonProgressSpinner
-import com.example.myinstaclone.presentation.IgViewModel
-import com.example.myinstaclone.presentation.UserImageCard
+import com.example.myinstaclone.presentation.*
 import com.example.myinstaclone.presentation.bottomnavigationmenu.BottomNavigationItem
 import com.example.myinstaclone.presentation.bottomnavigationmenu.BottomNavigationMenu
 
@@ -68,7 +66,9 @@ fun MyPostsScreen(navController: NavController, vm: IgViewModel) {
                 Text(text = userData?.bio ?: "")
             }
             OutlinedButton(
-                onClick = { }, modifier = Modifier
+                onClick = {
+                    navigateTo(navController, ScreenDestination.Profile)
+                }, modifier = Modifier
                     .padding(8.dp)
                     .fillMaxWidth(),
                 colors = ButtonDefaults.buttonColors(backgroundColor = Color.Transparent),

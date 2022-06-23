@@ -19,6 +19,7 @@ import com.example.myinstaclone.presentation.ScreenDestination
 import com.example.myinstaclone.presentation.feedscreen.FeedScreen
 import com.example.myinstaclone.presentation.loginscreen.LoginScreen
 import com.example.myinstaclone.presentation.mypostsscreen.MyPostsScreen
+import com.example.myinstaclone.presentation.profilescreen.ProfileScreen
 import com.example.myinstaclone.presentation.searchscreen.SearchScreen
 import com.example.myinstaclone.presentation.signupscreen.SignupScreen
 import com.example.myinstaclone.ui.theme.MyInstaCloneTheme
@@ -62,6 +63,9 @@ fun InstagramApp() {
         }
         composable(ScreenDestination.MyPosts.route) {
             MyPostsScreen(navController = navController, vm = vm)
+        }
+        composable(ScreenDestination.Profile.route) {
+            ProfileScreen(navController = navController, vm = vm)
         }
     }
 }

@@ -6,4 +6,5 @@ sealed class ScreenDestination(val route: String) {
     object Feed : ScreenDestination("feed")
     object Search : ScreenDestination("search")
     object MyPosts : ScreenDestination("myposts")
+    object Profile : ScreenDestination("profile")
 }
