@@ -123,9 +123,18 @@ fun MyPostsScreen(navController: NavController, vm: IgViewModel) {
                 isContextLoading = isLoading,
                 postsLoading = postsLoading,
                 posts = posts,
-                modifier = Modifier.weight(1f).padding(1.dp).fillMaxSize(),
+                modifier = Modifier
+                    .weight(1f)
+                    .padding(1.dp)
+                    .fillMaxSize(),
 
-                ) {}
+                ) {
+                navigateTo(
+                    navController = navController,
+                    dest = ScreenDestination.SinglePost,
+                    NavParam("post", it)
+                )
+            }
 
         }
         BottomNavigationMenu(

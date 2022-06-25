@@ -13,6 +13,7 @@ import androidx.hilt.navigation.compose.hiltViewModel
 import androidx.navigation.compose.NavHost
 import androidx.navigation.compose.composable
 import androidx.navigation.compose.rememberNavController
+import com.example.myinstaclone.data.remote.dto.PostDto
 import com.example.myinstaclone.presentation.IgViewModel
 import com.example.myinstaclone.presentation.NotificationMessage
 import com.example.myinstaclone.presentation.ScreenDestination
@@ -23,6 +24,7 @@ import com.example.myinstaclone.presentation.newpostscreen.NewPostScreen
 import com.example.myinstaclone.presentation.profilescreen.ProfileScreen
 import com.example.myinstaclone.presentation.searchscreen.SearchScreen
 import com.example.myinstaclone.presentation.signupscreen.SignupScreen
+import com.example.myinstaclone.presentation.singlepostscreen.SinglePostScreen
 import com.example.myinstaclone.ui.theme.MyInstaCloneTheme
 import dagger.hilt.android.AndroidEntryPoint
 
@@ -72,6 +74,14 @@ fun InstagramApp() {
             val imageUri = navBackstackEntry.arguments?.getString("imageUri")
             imageUri?.let {
                 NewPostScreen(navController = navController, vm = vm, encodedUri = it)
+            }
+        }
+        composable(ScreenDestination.SinglePost.route) {
+            val postData =
+                navController.previousBackStackEntry?.arguments?.getParcelable<PostDto>("post")
+
+            postData?.let {
+                SinglePostScreen(navController = navController, vm = vm, post = postData)
             }
         }
     }

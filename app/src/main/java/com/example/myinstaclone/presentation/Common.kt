@@ -1,5 +1,6 @@
 package com.example.myinstaclone.presentation
 
+import android.os.Parcelable
 import android.widget.Toast
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.background
@@ -51,7 +52,15 @@ fun CommonProgressSpinner() {
     }
 }
 
-fun navigateTo(navController: NavController, dest: ScreenDestination) {
+data class NavParam(
+    val name: String,
+    val value: Parcelable
+)
+
+fun navigateTo(navController: NavController, dest: ScreenDestination, vararg params: NavParam) {
+    for (param in params) {
+        navController.currentBackStackEntry?.arguments?.putParcelable(param.name, param.value)
+    }
     navController.navigate(dest.route) {
         popUpTo(dest.route)
         launchSingleTop = true
