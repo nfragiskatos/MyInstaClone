@@ -4,6 +4,7 @@ import android.net.Uri
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.myinstaclone.data.Event
+import com.example.myinstaclone.data.remote.dto.PostDto
 import com.example.myinstaclone.data.remote.dto.UserDto
 import com.google.firebase.auth.FirebaseAuth
 import com.google.firebase.firestore.FirebaseFirestore
@@ -14,6 +15,7 @@ import java.util.*
 import javax.inject.Inject
 
 const val USERS = "users"
+const val POSTS = "posts"
 
 @HiltViewModel
 class IgViewModel @Inject constructor(
@@ -186,5 +188,49 @@ class IgViewModel @Inject constructor(
         signedIn.value = false
         userData.value = null
         popupNotification.value = Event("Logged Out")
+    }
+
+    fun onNewPost(uri: Uri, description: String, onPostSuccess: () -> Unit) {
+        uploadImage(uri) {
+            onCreatePost(it, description, onPostSuccess)
+        }
+    }
+
+    private fun onCreatePost(imageUri: Uri, description: String, onPostSuccess: () -> Unit) {
+        inProgress.value = true
+        val currentUid = auth.currentUser?.uid
+        val currentUsername = userData.value?.username
+        val currentUserImage = userData.value?.imageUrl
+
+        if (currentUid != null) {
+            val postUuid = UUID.randomUUID().toString()
+
+            val post = PostDto(
+                postId = postUuid,
+                userId = currentUid,
+                username = currentUsername,
+                userImage = currentUserImage,
+                postImage = imageUri.toString(),
+                postDescription = description,
+                time = System.currentTimeMillis()
+            )
+
+            db.collection(POSTS).document(postUuid).set(post)
+                .addOnSuccessListener {
+                    popupNotification.value = Event("Post successfully created")
+                    inProgress.value = false
+                    onPostSuccess.invoke()
+                }
+                .addOnFailureListener { e ->
+                    handleException(e, "Unable to create post")
+                    inProgress.value = false
+                }
+
+
+        } else {
+            handleException(message = "Error: username unavailable. Unable to create post")
+            onLogout()
+            inProgress.value = false
+        }
     }
 }

@@ -1,5 +1,6 @@
 package com.example.myinstaclone.presentation.newpostscreen
 
+import android.net.Uri
 import androidx.compose.foundation.Image
 import androidx.compose.foundation.clickable
 import androidx.compose.foundation.layout.*
@@ -43,7 +44,9 @@ fun NewPostScreen(navController: NavController, vm: IgViewModel, encodedUri: Str
             Text(text = "Cancel", modifier = Modifier.clickable { navController.popBackStack() })
             Text(text = "Post", modifier = Modifier.clickable {
                 focusManager.clearFocus()
-                //call the view model function
+                vm.onNewPost(Uri.parse(imageUri), description) {
+                    navController.popBackStack()
+                }
             })
         }
 
