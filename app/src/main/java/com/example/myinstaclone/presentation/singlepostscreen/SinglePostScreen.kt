@@ -76,10 +76,16 @@ fun SinglePostDisplay(
 
             if (userData?.userId == post.userId) {
                 // current user's post, don't show anything
+            } else if (userData?.following?.contains(post.userId) == true) {
+                Text(
+                    text = "Following",
+                    color = Color.Gray,
+                    modifier = Modifier.clickable { vm.onFollowClick(post.userId!!) })
             } else {
-                Text(text = "Follow", color = Color.Blue, modifier = Modifier.clickable {
-                    // follow user
-                })
+                Text(
+                    text = "Follow",
+                    color = Color.Blue,
+                    modifier = Modifier.clickable { vm.onFollowClick(post.userId!!) })
             }
         }
     }

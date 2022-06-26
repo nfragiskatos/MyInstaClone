@@ -333,4 +333,24 @@ class IgViewModel @Inject constructor(
                 }
         }
     }
+
+    fun onFollowClick(userId: String) {
+        auth.currentUser?.uid?.let { currentUser ->
+            val following = arrayListOf<String>()
+            userData.value?.following?.let {
+                following.addAll(it)
+            }
+
+            if (following.contains(userId)) {
+                following.remove(userId)
+            } else {
+                following.add(userId)
+            }
+
+            db.collection(USERS).document(currentUser).update("following", following)
+                .addOnSuccessListener {
+                    getUserData(currentUser)
+                }
+        }
+    }
 }
