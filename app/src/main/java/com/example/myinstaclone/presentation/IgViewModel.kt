@@ -240,6 +240,15 @@ class IgViewModel @Inject constructor(
         if (currentUid != null) {
             val postUuid = UUID.randomUUID().toString()
 
+            // Real-world application of course should do something more sophisticated
+            // example list of words to exclude
+            val fillerWords = listOf("the", "be", "to", "is", "of", "and", "or", "in", "it")
+            // get distinct words that aren't filler and aren't special characters
+            val searchTerms = description
+                .split(" ", ".", ",", "?", "!", "#")
+                .map { it.lowercase() }
+                .filter { it.isNotEmpty() and !fillerWords.contains(it) }
+
             val post = PostDto(
                 postId = postUuid,
                 userId = currentUid,
@@ -248,7 +257,8 @@ class IgViewModel @Inject constructor(
                 postImage = imageUri.toString(),
                 postDescription = description,
                 time = System.currentTimeMillis(),
-                likes = listOf()
+                likes = listOf(),
+                searchTerms = searchTerms
             )
 
             db.collection(POSTS).document(postUuid).set(post)

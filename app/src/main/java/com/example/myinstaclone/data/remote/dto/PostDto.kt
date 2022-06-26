@@ -15,7 +15,11 @@ data class PostDto(
     val postImage: String? = null,
     val postDescription: String? = null,
     val time: Long? = null,
-    val likes: List<String>? = null
+    val likes: List<String>? = null,
+
+    // Firestore doesn't allow searching of strings within a string field. Workaround is to just
+    // keep a list of words on each post we can search
+    val searchTerms: List<String>? = null
 ) : Parcelable {
     constructor(parcel: Parcel) : this(
         parcel.readString(),
@@ -25,6 +29,7 @@ data class PostDto(
         parcel.readString(),
         parcel.readString(),
         parcel.readValue(Long::class.java.classLoader) as? Long,
+        parcel.createStringArrayList(),
         parcel.createStringArrayList()
     ) {
     }
@@ -38,6 +43,7 @@ data class PostDto(
         parcel.writeString(postDescription)
         parcel.writeValue(time)
         parcel.writeStringList(likes)
+        parcel.writeStringList(searchTerms)
     }
 
     override fun describeContents(): Int {
@@ -53,5 +59,4 @@ data class PostDto(
             return arrayOfNulls(size)
         }
     }
-
 }
