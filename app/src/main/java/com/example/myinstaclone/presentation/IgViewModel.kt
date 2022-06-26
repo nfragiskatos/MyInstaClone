@@ -226,6 +226,7 @@ class IgViewModel @Inject constructor(
         signedIn.value = false
         userData.value = null
         popupNotification.value = Event("Logged Out")
+        searchedPosts.value = listOf()
     }
 
     fun onNewPost(uri: Uri, description: String, onPostSuccess: () -> Unit) {
