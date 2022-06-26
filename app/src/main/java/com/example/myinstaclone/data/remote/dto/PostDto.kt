@@ -15,7 +15,7 @@ data class PostDto(
     val postImage: String? = null,
     val postDescription: String? = null,
     val time: Long? = null,
-    val likes: List<String>? = null,
+    var likes: List<String>? = null,
 
     // Firestore doesn't allow searching of strings within a string field. Workaround is to just
     // keep a list of words on each post we can search

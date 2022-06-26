@@ -396,4 +396,27 @@ class IgViewModel @Inject constructor(
                 postsFeedProgress.value = false
             }
     }
+
+    private fun likePost(postData: PostDto) {
+        auth.currentUser?.uid?.let { userId ->
+            postData.likes?.let { likes ->
+                val newLikes = arrayListOf<String>()
+                if (likes.contains(userId)) {
+                    newLikes.addAll(likes.filter { userId != it })
+                } else {
+                    newLikes.addAll(likes)
+                    newLikes.add(userId)
+                }
+                postData.postId?.let { postId ->
+                    db.collection(POSTS).document(postId).update("likes", newLikes)
+                        .addOnSuccessListener {
+                            postData.likes = newLikes
+                        }
+                        .addOnFailureListener { e ->
+                            handleException(e, "Unable to like post")
+                        }
+                }
+            }
+        }
+    }
 }
