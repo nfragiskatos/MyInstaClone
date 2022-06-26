@@ -39,6 +39,9 @@ class IgViewModel @Inject constructor(
     val searchedPosts = mutableStateOf<List<PostDto>>(listOf())
     val searchedPostsProgress = mutableStateOf(false)
 
+    val postsFeed = mutableStateOf<List<PostDto>>(listOf())
+    val postsFeedProgress = mutableStateOf(false)
+
     init {
 //        auth.signOut()
         val currentUser = auth.currentUser
@@ -152,6 +155,7 @@ class IgViewModel @Inject constructor(
                 userData.value = user
                 inProgress.value = false
                 refreshPosts()
+                getPersonalizedFeed()
             }
             .addOnFailureListener { e ->
                 handleException(e, "Cannot retrieve user data")
@@ -227,6 +231,7 @@ class IgViewModel @Inject constructor(
         userData.value = null
         popupNotification.value = Event("Logged Out")
         searchedPosts.value = listOf()
+        postsFeed.value = listOf()
     }
 
     fun onNewPost(uri: Uri, description: String, onPostSuccess: () -> Unit) {
@@ -352,5 +357,43 @@ class IgViewModel @Inject constructor(
                     getUserData(currentUser)
                 }
         }
+    }
+
+    private fun getPersonalizedFeed() {
+        val following = userData.value?.following
+        if (!following.isNullOrEmpty()) {
+            postsFeedProgress.value = true
+            db.collection(POSTS).whereIn("userId", following).get()
+                .addOnSuccessListener {
+                    convertPosts(documents = it, outState = postsFeed)
+                    if (postsFeed.value.isEmpty()) {
+                        getGeneralFeed()
+                    } else {
+                        postsFeedProgress.value = false
+                    }
+                }
+                .addOnFailureListener { e ->
+                    handleException(e, "Cannot get personalized feed")
+                    postsFeedProgress.value = false
+
+                }
+        } else {
+            getGeneralFeed()
+        }
+    }
+
+    private fun getGeneralFeed() {
+        postsFeedProgress.value = true
+        val currentTime = System.currentTimeMillis()
+        val difference = 24 * 60 * 60 * 1000 // 1 day in millis
+        db.collection(POSTS).whereGreaterThan("time", currentTime - difference).get()
+            .addOnSuccessListener {
+                convertPosts(documents = it, outState = postsFeed)
+                postsFeedProgress.value = false
+            }
+            .addOnFailureListener { e ->
+                handleException(e, "Cannot get feed")
+                postsFeedProgress.value = false
+            }
     }
 }
