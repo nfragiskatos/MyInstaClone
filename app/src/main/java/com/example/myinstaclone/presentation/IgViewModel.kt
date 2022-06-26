@@ -5,6 +5,7 @@ import androidx.compose.runtime.MutableState
 import androidx.compose.runtime.mutableStateOf
 import androidx.lifecycle.ViewModel
 import com.example.myinstaclone.data.Event
+import com.example.myinstaclone.data.remote.dto.CommentDto
 import com.example.myinstaclone.data.remote.dto.PostDto
 import com.example.myinstaclone.data.remote.dto.UserDto
 import com.google.firebase.auth.FirebaseAuth
@@ -19,6 +20,7 @@ import javax.inject.Inject
 
 const val USERS = "users"
 const val POSTS = "posts"
+const val COMMENTS = "comments"
 
 @HiltViewModel
 class IgViewModel @Inject constructor(
@@ -41,6 +43,9 @@ class IgViewModel @Inject constructor(
 
     val postsFeed = mutableStateOf<List<PostDto>>(listOf())
     val postsFeedProgress = mutableStateOf(false)
+
+    val comments = mutableStateOf<List<CommentDto>>(listOf())
+    val commentsProgress = mutableStateOf(false)
 
     init {
 //        auth.signOut()
@@ -232,6 +237,7 @@ class IgViewModel @Inject constructor(
         popupNotification.value = Event("Logged Out")
         searchedPosts.value = listOf()
         postsFeed.value = listOf()
+        comments.value = listOf()
     }
 
     fun onNewPost(uri: Uri, description: String, onPostSuccess: () -> Unit) {
@@ -397,7 +403,7 @@ class IgViewModel @Inject constructor(
             }
     }
 
-    private fun likePost(postData: PostDto) {
+    fun onLikePost(postData: PostDto) {
         auth.currentUser?.uid?.let { userId ->
             postData.likes?.let { likes ->
                 val newLikes = arrayListOf<String>()
@@ -417,6 +423,27 @@ class IgViewModel @Inject constructor(
                         }
                 }
             }
+        }
+    }
+
+    fun createComment(postId: String, text: String) {
+        userData.value?.username?.let { username ->
+            val commentId = UUID.randomUUID().toString()
+            val comment = CommentDto(
+                commentId = commentId,
+                postId = postId,
+                username = username,
+                text = text,
+                timestamp = System.currentTimeMillis()
+            )
+
+            db.collection(COMMENTS).document(commentId).set(comment)
+                .addOnSuccessListener {
+                    // get existing comments
+                }
+                .addOnFailureListener { e ->
+                    handleException(e, "Cannot create comment")
+                }
         }
     }
 }
