@@ -22,6 +22,7 @@ import com.example.myinstaclone.data.remote.dto.PostDto
 import com.example.myinstaclone.presentation.CommonDivider
 import com.example.myinstaclone.presentation.CommonImage
 import com.example.myinstaclone.presentation.IgViewModel
+import com.example.myinstaclone.presentation.ScreenDestination
 
 @Composable
 fun SinglePostScreen(
@@ -114,6 +115,13 @@ fun SinglePostDisplay(
         Text(text = post.postDescription ?: "", modifier = Modifier.padding(start = 8.dp))
     }
     Row(modifier = Modifier.padding(8.dp)) {
-        Text(text = "10 comments", color = Color.Gray, modifier = Modifier.padding(start = 8.dp))
+        Text(
+            text = "10 comments",
+            color = Color.Gray,
+            modifier = Modifier.padding(start = 8.dp).clickable {
+                post.postId?.let {
+                    navController.navigate(ScreenDestination.Comments.createRoute(it))
+                }
+            })
     }
 }

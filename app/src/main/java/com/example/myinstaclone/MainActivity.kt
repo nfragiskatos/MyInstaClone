@@ -17,6 +17,7 @@ import com.example.myinstaclone.data.remote.dto.PostDto
 import com.example.myinstaclone.presentation.IgViewModel
 import com.example.myinstaclone.presentation.NotificationMessage
 import com.example.myinstaclone.presentation.ScreenDestination
+import com.example.myinstaclone.presentation.commentsscreen.CommentsScreen
 import com.example.myinstaclone.presentation.feedscreen.FeedScreen
 import com.example.myinstaclone.presentation.loginscreen.LoginScreen
 import com.example.myinstaclone.presentation.mypostsscreen.MyPostsScreen
@@ -82,6 +83,13 @@ fun InstagramApp() {
 
             postData?.let {
                 SinglePostScreen(navController = navController, vm = vm, post = postData)
+            }
+        }
+
+        composable(ScreenDestination.Comments.route) { navBackStackEntry ->
+            val postId = navBackStackEntry.arguments?.getString("postId")
+            postId?.let {
+                CommentsScreen(navController = navController, viewModel = vm, postId = it)
             }
         }
     }

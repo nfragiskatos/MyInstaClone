@@ -12,4 +12,7 @@ sealed class ScreenDestination(val route: String) {
     }
 
     object SinglePost : ScreenDestination("singlepost")
+    object Comments : ScreenDestination("comments/{postId}") {
+        fun createRoute(postId: String) = "comments/$postId"
+    }
 }
