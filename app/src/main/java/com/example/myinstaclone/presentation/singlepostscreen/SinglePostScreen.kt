@@ -7,6 +7,7 @@ import androidx.compose.foundation.shape.CircleShape
 import androidx.compose.material.Card
 import androidx.compose.material.Text
 import androidx.compose.runtime.Composable
+import androidx.compose.runtime.LaunchedEffect
 import androidx.compose.ui.Alignment
 import androidx.compose.ui.Modifier
 import androidx.compose.ui.graphics.Color
@@ -30,6 +31,13 @@ fun SinglePostScreen(
     vm: IgViewModel,
     post: PostDto
 ) {
+
+    val comments = vm.comments.value
+
+    LaunchedEffect(key1 = Unit) {
+        vm.getComments(post.postId)
+    }
+
     post.userId?.let {
         Column(
             modifier = Modifier
@@ -43,7 +51,12 @@ fun SinglePostScreen(
 
             CommonDivider()
 
-            SinglePostDisplay(navController, vm, post)
+            SinglePostDisplay(
+                navController = navController,
+                vm = vm,
+                post = post,
+                numComments = comments.size
+            )
 
         }
     }
@@ -53,7 +66,8 @@ fun SinglePostScreen(
 fun SinglePostDisplay(
     navController: NavController,
     vm: IgViewModel,
-    post: PostDto
+    post: PostDto,
+    numComments: Int
 ) {
     val userData = vm.userData.value
     Box(
@@ -116,12 +130,14 @@ fun SinglePostDisplay(
     }
     Row(modifier = Modifier.padding(8.dp)) {
         Text(
-            text = "10 comments",
+            text = "$numComments comment${if (numComments > 1) "s" else ""}",
             color = Color.Gray,
-            modifier = Modifier.padding(start = 8.dp).clickable {
-                post.postId?.let {
-                    navController.navigate(ScreenDestination.Comments.createRoute(it))
-                }
-            })
+            modifier = Modifier
+                .padding(start = 8.dp)
+                .clickable {
+                    post.postId?.let {
+                        navController.navigate(ScreenDestination.Comments.createRoute(it))
+                    }
+                })
     }
 }
