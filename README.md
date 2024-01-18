@@ -1,14 +1,23 @@
 # MyInstaClone
 Limited clone of the Instagram app using Android Jetpack Compose and Firebase
 
-### Patterns / Technologies
-- MVVM Architecture
-- Compose
-- Compose Navigation
-- Dagger / Hilt
-- Firebase
-- Callbacks
-- Animations
+### Topics Covered:
+<table>
+  <tr>
+    <td>MVVM</td>
+    <td>Compose</td>
+    <td>Dagger/Hilt</td>
+    <td>Firebase</td>
+    <td>Callbacks</td>
+  </tr>
+  <tr>
+    <td>Bottom Navigation</td>
+    <td>ViewModel</td>
+    <td>State</td>
+    <td>Animations</td>
+    <td></td>
+  </tr>
+</table>
 
 ### Screens + Features
 
